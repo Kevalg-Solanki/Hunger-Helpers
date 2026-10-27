@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { handleSuccess } from "../utils/Toast";
 
 
 
@@ -62,6 +63,8 @@ export const ContextProvider = ({ children }) => {
 
     const addNotification = (notification) => {
         setNotifications(prev => [...prev, notification]);
+        handleSuccess("New Notification");
+        localStorage.setItem("notificaitons",JSON.stringify(notification));
         // Auto-remove after 5 seconds
         setTimeout(() => {
             setNotifications(prev => prev.filter(n => n.id !== notification.id));
@@ -111,7 +114,7 @@ export const ContextProvider = ({ children }) => {
             registrationData, updateRegistrationData, userData, updateUserData, forgotIdentifier,
             updateForgotIdentifier, contributionInfo, updateContributionInfo, donations, updateDonations,
             donationFilter, updateDonationFilter, notifications, addNotification, removeNotification,
-            editDonationData, updateEditDonationData, updateOpenBox, openBox
+            editDonationData, updateEditDonationData, updateOpenBox, openBox,setNotifications
         }}>
             {children}
         </contextAPI.Provider>

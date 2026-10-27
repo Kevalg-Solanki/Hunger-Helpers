@@ -14,53 +14,18 @@ const initSocket = (server) => {
   io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
-    socket.on("joinUser", (userId) => {
+    socket.on("join-room", (user) => {
+      let {userId,role} =user
+      //join own room
       socket.join(userId);
       console.log(`User ${userId} joined room ${userId}`);
+
+      //join room based on roles 
+      role = role=="HouseHold-Donor" || role =="Restaurant-Donor"?"donor":role;
+      socket.join(role.toLowerCase());
+      console.log(`User ${userId} joinde room ${role.toLowerCase()}`)
     });
 
-    socket.on("HouseHold-Donor", (userId) => {
-      socket.join("donor");
-      console.log(`User ${userId} joined the Donor Room`);
-    });
-
-    socket.on("Restaurant-Donor", (userId) => {
-      socket.join("donor");
-      console.log(`User ${userId} joined the Donor Room`);
-    });
-
-    socket.on("Volunteer", (userId) => {
-      socket.join("volunteer");
-      console.log(`User ${userId} joined volunteer Room`);
-    });
-
-    socket.on("Manager", (userId) => {
-      socket.join("manager");
-      console.log(`User ${userId} joined Manager Room`);
-    });
-
-    socket.on("Admin", (userId) => {
-      socket.join("admin");
-      console.log(`User ${userId} joined admin Room`);
-    });
-
-    socket.on("notification", (message) => {
-      console.log("Received notification:", message);
-    });
-
-    socket.on("join-tracking-room", (donationBoxId) => {
-      socket.join(`tracking-${donationBoxId}`);
-      console.log(`User joined tracking room for donation ${donationBoxId}`);
-    });
-    
-    socket.on("leaveRoom", (userId) => {
-      socket.leave(userId);
-      console.log(`User ${userId} left room ${userId}`);
-    });
-
-    socket.on("disconnect", () => {
-      console.log(`User disconnected: ${userId}`);
-    });
   });
 };
 

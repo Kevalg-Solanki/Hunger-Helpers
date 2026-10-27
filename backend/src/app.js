@@ -14,6 +14,8 @@ const {Server} = require("socket.io")
 const updateAllLeaderboards = require("./functions&utils/updateLeaderboard.js");
 const calculateRegionAnalytics = require('./functions&utils/calculateAnalytics.js');
 const calculateDailyDonationData = require('./functions&utils/calculateDailyDonationData.js');
+const timeOuts = require('./functions&utils/timeOuts.js');
+
 
 //-from config
 const dataBaseConnect = require("./config/dbConnect.js")
@@ -60,7 +62,12 @@ cron.schedule('0 0 * * *', async () => {
   await calculateDailyDonationData();
   });
 
-  
+// Change Donation Box Status to expire
+cron.schedule("*/5 * * * *",async()=>{
+  await timeOuts();
+
+})
+
 
   
   app.use(express.json());
